@@ -1,0 +1,24 @@
+@import 'tailwindcss';
+
+@source '../../vendor/laravel/framework/src/Illuminate/Pagination/resources/views/*.blade.php';
+@source '../../storage/framework/views/*.php';
+@source '../**/*.blade.php';
+@source '../**/*.js';
+
+@theme {
+    --font-sans: 'Instrument Sans', ui-sans-serif, system-ui, sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji',
+        'Segoe UI Symbol', 'Noto Color Emoji';
+}
+
+nav{
+    @apply bg-green-500 shadow-md
+}
+
+.small-line{
+    @apply justify-self-center border-2 border-green-500 w-8 rounded mt-2
+}
+
+.gas-text{
+    @apply justify-self-center text-xs text-gray-500
+}
+
