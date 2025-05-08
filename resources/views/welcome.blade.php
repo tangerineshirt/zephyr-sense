@@ -5,7 +5,8 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
 
-    <title>Zephyr Sense</title>
+    <link rel="icon" href="{{ asset('images/Zephyr.png') }}" type="image/png">
+    <title>Zephyr</title>
 
     <!-- Styles / Scripts -->
     @vite(['resources/css/app.css', 'resources/js/app.js'])
@@ -16,16 +17,16 @@
         <div class="w-full max-w-md md:max-w-2xl bg-white rounded-2xl shadow-xl p-8 md:p-12">
             <div class="flex flex-col items-center space-y-4">
                 {{-- Logo App --}}
-                <img src="{{ asset('images/Zephyr.png') }}" alt="Zephyr Sense Logo" class="w-32 h-auto"> 
+                <img src="{{ asset('images/Zephyr.png') }}" alt="Zephyr Sense Logo" class="w-32 h-auto">
                 {{-- TODO: Ganti logo.png dengan logo asli di folder public/images --}}
-    
+
                 <h1 class="text-2xl md:text-3xl font-bold text-green-700">Selamat Datang</h1>
                 <p class="text-sm md:text-base text-gray-600 text-center">Pantau Kualitas Udara Anda</p>
             </div>
-    
+
             <form method="POST" action="" class="mt-8 space-y-6">
                 @csrf
-    
+
                 <div class="space-y-4">
                     <div>
                         <label for="email" class="sr-only">Email</label>
@@ -38,7 +39,7 @@
                                 placeholder="Email">
                         </div>
                     </div>
-    
+
                     <div>
                         <label for="password" class="sr-only">Password</label>
                         <div class="flex items-center bg-green-50 border border-green-200 rounded-lg px-3 py-2">
@@ -56,7 +57,7 @@
                         <label for="remember_me" class="text-sm text-gray-700">Ingat Saya</label>
                     </div>
                 </div>
-    
+
                 <div class="flex flex-col items-center space-y-2">
                     <button type="submit"
                         class="w-full bg-green-600 hover:bg-green-700 text-white font-bold py-2 px-4 rounded-lg transition">

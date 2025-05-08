@@ -6,20 +6,23 @@ use App\Models\Air;
 use Illuminate\Http\Request;
 use Illuminate\Validation\ValidationException;
 use Illuminate\Support\Facades\Auth;
+use Carbon\Carbon;
 
 class AirController extends Controller
 {
-    public function showLogin(){
+    public function showLogin()
+    {
         return view('welcome');
     }
 
-    public function login(Request $request){
+    public function login(Request $request)
+    {
         $validated = $request->validate([
             'email' => 'required|string',
             'password' => 'required|string'
         ]);
 
-        if(Auth::attempt($validated)){
+        if (Auth::attempt($validated)) {
             $request->session()->regenerate();
             return redirect()->route('home');
         }
@@ -29,46 +32,113 @@ class AirController extends Controller
         ]);
     }
 
-    public function home(){
+    public function home()
+    {
         $air = Air::latest()->first();
-        $colorClass = match($air->air_quality) {
+        $colorClass = match ($air->air_quality) {
             'Good' => 'bg-green-500',
             'Moderate' => 'bg-yellow-400',
             'Poor' => 'bg-orange-500',
             'Hazardous' => 'bg-red-500',
             default => 'bg-gray-500',
         };
-        $purifier = match($air->air_quality) {
+        $purifier = match ($air->air_quality) {
             'Good' => 'Tidak Aktif',
             'Moderate' => 'Aktif - Mode Low',
             'Poor' => 'Aktif - Mode Max',
             'Hazardous' => 'Aktif - Mode Max',
             default => 'Tidak Aktif',
         };
-        $statusPurifier = match($air->air_quality){
+        $statusPurifier = match ($air->air_quality) {
             'Good' => 'Kualitas Udara Baik',
             'Moderate' => 'Membersihkan Udara (Kecepatan rendah)',
             'Poor' => 'Membersihkan Udara (Kecepatan maksimal)',
             'Hazardous' => 'Membersihkan Udara (Kecepatan maksimal)',
             default => 'Kualitas Udara Baik',
         };
-        $tip1 = match($air->air_quality){
-            'Good' => 'Kualias udara saa ini sangat baik. Debu pabrik semen minimal. ini waktu yang tepat untuk berkegiatan diluar ruangan',
-            'Moderate' => 'Terdeteksi peningkatan partikel PM2.5. Air purifier diaktiflkan untuk meminimalkan dampak debu semen pada lingkungan dalam ruangan',
-            'Poor' => 'Kadar NO² dan PM2.5 tinggi. Kemungkinan aktivitas pabrik semen sedang tinggi. air purifier bekerja maksimal untuk menjaga kualitas udara dalam ruangan',
-            'Hazardous' => 'BAHAYA! Tingkat polutan sangat tinggi. Kadar PM2.5, NO² dan CO melebihi ambang batas amann. Segera pindah lokasi yang lebih aman',
-            default => 'Kualias udara saa ini sangat baik. Debu pabrik semen minimal. ini waktu yang tepat untuk berkegiatan diluar ruangan',
+        $tip1 = match ($air->air_quality) {
+            'Good' => 'Kualias udara saat ini sangat baik. Debu pabrik semen minimal. ini waktu yang tepat untuk berkegiatan di luar ruangan.',
+            'Moderate' => 'Terdeteksi peningkatan partikel PM2.5. Air purifier diaktifkan untuk meminimalkan dampak debu semen pada lingkungan dalam ruangan.',
+            'Poor' => 'Kadar NO² dan PM2.5 tinggi. Kemungkinan aktivitas pabrik semen sedang tinggi. air purifier bekerja maksimal untuk menjaga kualitas udara dalam ruangan.',
+            'Hazardous' => 'BAHAYA! Tingkat polutan sangat tinggi. Kadar PM2.5, NO² dan CO melebihi ambang batas aman. Segera pindah lokasi yang lebih aman.',
+            default => 'Kualias udara saat ini sangat baik. Debu pabrik semen minimal. ini waktu yang tepat untuk berkegiatan di luar ruangan.',
+        };
+        $tip2 = match ($air->air_quality) {
+            'Good' => 'Periksa filter air purifier secara berkala untuk memastikan kinerja optimal saat dibutuhkan.',
+            'Moderate' => 'Tutup jendela dan pintu untuk mencegah masuknya polutan dari pabrik semen. Pastikan filter air purifier dalam kondisi baik.',
+            'Poor' => 'Tutup jendela dan pintu untuk mencegah masuknya polutan dari pabrik semen. Pastikan filter air purifier dalam kondisi baik.',
+            'Hazardous' => '',
+            default => 'Periksa filter air purifier secara berkala untuk memastikan kinerja optimal saat dibutuhkan.',
+        };
+        $border = match ($air->air_quality) {
+            'Good' => 'border-green-500',
+            'Moderate' => 'border-yellow-500',
+            'Poor' => 'border-orange-500',
+            'Hazardous' => 'border-red-500',
+            default => 'border-gray-500',
+        };
+        $kondisi = match ($air->air_quality) {
+            'Good' => 'bg-green-200',
+            'Moderate' => 'bg-yellow-200',
+            'Poor' => 'bg-orange-200',
+            'Hazardous' => 'bg-red-200',
+            default => 'bg-gray-200',
         };
         return view('home', [
-            'air' => $air, 
+            'air' => $air,
             'colorClass' => $colorClass,
             'purifier' => $purifier,
             'statusPurifier' => $statusPurifier,
             'tip1' => $tip1,
+            'tip2' => $tip2,
+            'border' => $border,
+            'kondisi' => $kondisi,
         ]);
     }
-    public function history(){
+    public function history()
+    {
+        $startDate = Carbon::now()->subDays(2)->startOfDay(); 
+        $endDate = Carbon::now()->endOfDay(); 
 
+        $data = Air::whereBetween('created_at', [$startDate, $endDate])
+            ->orderBy('created_at', 'desc')
+            ->get();
+
+        $filtered = collect();
+        $previousStatus = null;
+
+        foreach ($data as $record) {
+            if ($record->air_quality !== $previousStatus) {
+                $filtered->push($record);
+                $previousStatus = $record->air_quality;
+            }
+        }
+        return view('history', ['history' => $filtered]);
     }
 
+    public function setting(){
+        $user = Auth::user();
+        return view('setting', ['user' => $user]);
+    }
+
+    public function sensor(Request $request){
+        $request->validate([
+            'pm25' => 'required|float',
+            'co' => 'required|float',
+            'no2' => 'required|float',
+            'temp' => 'required|float',
+            'humidity' => 'required|float',
+            'air_quality' => 'required|string',
+        ]);
+
+        Air::create([
+            'pm25' => $request->pm25,
+            'co' => $request->co,
+            'no2' => $request->no2,
+            'temp' => $request->temp,
+            'humidity' => $request->humidity,
+        ]);
+
+        return response()->json([]);
+    }
 }
