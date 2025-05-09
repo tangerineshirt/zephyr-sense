@@ -52,7 +52,6 @@
                         </div>
                     </div>
                 </div>
-
                 <div class="flex flex-col items-center space-y-2">
                     <button type="submit"
                         class="w-full bg-green-600 hover:bg-green-700 text-white font-bold py-2 px-4 rounded-lg transition">

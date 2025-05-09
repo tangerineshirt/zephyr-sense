@@ -6,6 +6,7 @@ use App\Models\Air;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\Log;
 use Illuminate\Validation\ValidationException;
 use Illuminate\Support\Facades\Auth;
 use Carbon\Carbon;
@@ -18,23 +19,38 @@ class AirController extends Controller
     }
 
     public function login(Request $request)
-    {
-        $credentials = $request->validate([
-            'email' => 'required|string|email',
-            'password' => 'required|string'
-        ]);
+{
+    $credentials = $request->validate([
+        'email' => 'required|string|email',
+        'password' => 'required|string'
+    ]);
 
-        if (Auth::attempt($credentials)) {
-            $request->session()->regenerate(); // Hindari session fixation
-            return redirect()->route('home');
-        }
-
-        throw ValidationException::withMessages([
-            'email' => 'Email atau password salah.'
-        ]);
+    // Coba login
+    if (Auth::attempt($credentials)) {
+        $request->session()->regenerate(); // Hindari session fixation
+        return redirect()->route('home');
     }
 
-    public function logout(Request $request){
+    // Jika gagal, cek user dan hash-nya
+    $user = User::where('email', $request->email)->first();
+    if ($user) {
+        // Cek apakah password cocok
+        dd([
+            'password_plain' => $request->password,
+            'password_hash_in_db' => $user->password,
+            'hash_check_result' => Hash::check($request->password, $user->password),
+        ]);
+    } else {
+        dd('User dengan email tersebut tidak ditemukan.');
+    }
+
+    throw ValidationException::withMessages([
+        'email' => 'Email atau password salah.'
+    ]);
+}
+
+    public function logout(Request $request)
+    {
         Auth::logout();
         $request->session()->invalidate();
         //the line above is to clear session data. If this isn't here that would make

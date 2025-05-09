@@ -31,9 +31,10 @@
             <p>{{ $user->email }}</p>
         </div>
     </div>
-    <a href="{{route('logout')}}">
-        <div class="flex m-4 border-2 border-red-500 text-red-500 justify-center rounded-md p-4 hover:bg-red-500 hover:text-white transition-colors duration-300">
+    <form method="POST" action="{{route('logout')}}">
+        @csrf
+        <button type='submit' class="flex m-4 border-2 border-red-500 text-red-500 justify-center rounded-md p-4 hover:bg-red-500 hover:text-white transition-colors duration-300">
             Keluar
-        </div>
-    </a>
+        </button>
+    </form>
 </x-layout>
