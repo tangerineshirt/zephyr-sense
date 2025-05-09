@@ -18,7 +18,7 @@
         $currentRoute = Route::currentRouteName();
     @endphp
 
-    <div class="fixed bottom-0 w-full bg-white border-t shadow-md flex justify-around items-center h-16 z-50">
+    <div class="fixed bottom-0 w-full bg-white border-t shadow-md flex justify-around items-center h-16 z-50 md:hidden">
         <a href="{{route('home')}}">
             <div class="flex flex-col items-center {{ $currentRoute === 'home' ? 'text-black' : 'text-gray-400' }}">
                 <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24"

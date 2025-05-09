@@ -3,7 +3,9 @@
 namespace App\Http\Controllers;
 
 use App\Models\Air;
+use App\Models\User;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Hash;
 use Illuminate\Validation\ValidationException;
 use Illuminate\Support\Facades\Auth;
 use Carbon\Carbon;
@@ -17,19 +19,56 @@ class AirController extends Controller
 
     public function login(Request $request)
     {
-        $validated = $request->validate([
-            'email' => 'required|string',
+        $credentials = $request->validate([
+            'email' => 'required|string|email',
             'password' => 'required|string'
         ]);
 
-        if (Auth::attempt($validated)) {
-            $request->session()->regenerate();
+        if (Auth::attempt($credentials)) {
+            $request->session()->regenerate(); // Hindari session fixation
             return redirect()->route('home');
         }
 
         throw ValidationException::withMessages([
-            'credentials' => 'Sorry, incorrect credentials'
+            'email' => 'Email atau password salah.'
         ]);
+    }
+
+    public function logout(Request $request){
+        Auth::logout();
+        $request->session()->invalidate();
+        //the line above is to clear session data. If this isn't here that would make
+        //whatever change an account makes accessible for other users.
+        //in short without it, it saves the data to the server not to a specific user
+        $request->session()->regenerateToken(); //regenerates new csrf token for the next session
+
+        return redirect()->route('show.login');
+    }
+
+    public function showRegister()
+    {
+        return view('register');
+    }
+
+    public function register(Request $request)
+    {
+        $validated = $request->validate([
+            'name' => 'required|string|max:255',
+            'email' => 'required|string|email|unique:users,email',
+            'password' => 'required|string|min:6',
+        ]);
+
+        // Simpan user baru dengan password yang sudah di-hash
+        $user = User::create([
+            'name' => $validated['name'],
+            'email' => $validated['email'],
+            'password' => Hash::make($validated['password']),
+        ]);
+
+        // Login langsung setelah register (opsional)
+        Auth::login($user);
+
+        return redirect()->route('home');
     }
 
     public function home()
@@ -97,8 +136,8 @@ class AirController extends Controller
     }
     public function history()
     {
-        $startDate = Carbon::now()->subDays(2)->startOfDay(); 
-        $endDate = Carbon::now()->endOfDay(); 
+        $startDate = Carbon::now()->subDays(2)->startOfDay();
+        $endDate = Carbon::now()->endOfDay();
 
         $data = Air::whereBetween('created_at', [$startDate, $endDate])
             ->orderBy('created_at', 'desc')
@@ -116,12 +155,14 @@ class AirController extends Controller
         return view('history', ['history' => $filtered]);
     }
 
-    public function setting(){
+    public function setting()
+    {
         $user = Auth::user();
-        return view('setting', ['user' => $user]);
+        return view('settings', ['user' => $user]);
     }
 
-    public function sensor(Request $request){
+    public function sensor(Request $request)
+    {
         $request->validate([
             'pm25' => 'required|float',
             'co' => 'required|float',

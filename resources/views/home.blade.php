@@ -1,7 +1,28 @@
 <x-layout>
     <nav class="fixed w-full z-50 {{ $colorClass }}">
-        <div class="flex h-16 items-center px-4 justify-center">
-            <h1 class="text-white text-xl font-semibold">Zephyr's</h1>
+        <div class="flex h-16 items-center px-4 justify-between">
+            <a href="{{ route('home') }}" class="hidden sm:flex">
+                <img src="{{ asset('images/home.png') }}" alt="Home" class="h-8 w-auto">
+            </a>
+            <h1 class="text-white text-xl font-semibold justify-self-center">Zephyr's</h1>
+            <div class="hidden sm:flex space-x-4">
+                <a href="{{ route('history') }}" class="flex items-center">
+                    <div class="flex flex-col items-center text-white">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" viewBox="0 0 24 24" fill="none"
+                            stroke="currentColor" stroke-width="2">
+                            <!-- Lingkaran luar jam -->
+                            <circle cx="12" cy="12" r="10" />
+                            <!-- Jarum jam (pendek) -->
+                            <line x1="12" y1="12" x2="12" y2="8" />
+                            <!-- Jarum menit (panjang) -->
+                            <line x1="12" y1="12" x2="16" y2="12" />
+                        </svg>
+                    </div>
+                </a>
+                <a href="{{route('setting')}}">
+                    <img src="{{asset('images/settings.png')}}" alt="Settings" class="h-8 w-auto">
+                </a>
+            </div>
         </div>
     </nav>
     <div class="grid sm:grid-cols-1 md:grid-cols-2 lg:grid-cols-2 pt-16">
@@ -73,18 +94,20 @@
             <h1>Tips dan Rekomendasi</h1>
         </div>
     </div>
-    <div class=" mx-4 mb-20 rounded-b-md p-4 shadow-md space-y-2">
+    <div class=" mx-4 @if ($air->air_quality !== 'Hazardous') mb-20 md:mb-4 @endif rounded-b-md p-4 shadow-md space-y-2">
         <div class="flex justify-start space-x-1">
             <img src="{{ asset('images/info.png') }}" alt="Info" class="w-auto h-4">
             <p class="text-xs text-gray-500">{{ $tip1 }}</p>
         </div>
-        <div class="flex justify-start space-x-1">
-            <img src="{{ asset('images/clip.png') }}" alt="Clip" class="w-auto h-4">
-            <p class="text-xs text-gray-500">{{ $tip2 }}</p>
-        </div>
+        @if ($air->air_quality !== 'Hazardous')
+            <div class="flex justify-start space-x-1">
+                <img src="{{ asset('images/clip.png') }}" alt="Clip" class="w-auto h-4">
+                <p class="text-xs text-gray-500">{{ $tip2 }}</p>
+            </div>
+        @endif
     </div>
     @if ($air->air_quality == 'Hazardous')
-        <div class="bg-red-600 text-white px-4 py-2 flex items-center space-x-3 pb-16">
+        <div class="bg-red-600 text-white px-4 py-2 flex items-center space-x-3 pb-18 sm:pb-2">
             <!-- Ikon Warning -->
             <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 flex-shrink-0" fill="none" viewBox="0 0 24 24"
                 stroke="currentColor">
