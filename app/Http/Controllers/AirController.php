@@ -31,19 +31,6 @@ class AirController extends Controller
         return redirect()->route('home');
     }
 
-    // Jika gagal, cek user dan hash-nya
-    $user = User::where('email', $request->email)->first();
-    if ($user) {
-        // Cek apakah password cocok
-        dd([
-            'password_plain' => $request->password,
-            'password_hash_in_db' => $user->password,
-            'hash_check_result' => Hash::check($request->password, $user->password),
-        ]);
-    } else {
-        dd('User dengan email tersebut tidak ditemukan.');
-    }
-
     throw ValidationException::withMessages([
         'email' => 'Email atau password salah.'
     ]);

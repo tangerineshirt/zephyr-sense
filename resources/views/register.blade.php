@@ -14,65 +14,55 @@
 
 <body>
     <div class="min-h-screen flex items-center justify-center bg-gradient-to-b from-green-500 to-green-100">
-        <div class="w-full max-w-md md:max-w-2xl bg-white rounded-2xl shadow-xl p-8 md:p-12 m-4">
-            <div class="flex flex-col items-center space-y-4">
-                {{-- Logo App --}}
-                <img src="{{ asset('images/Zephyr.png') }}" alt="Zephyr Sense Logo" class="w-32 h-auto">
-                {{-- TODO: Ganti logo.png dengan logo asli di folder public/images --}}
+    <div class="w-full max-w-sm bg-white rounded-xl shadow-md p-4 sm:p-6 m-2">
+        <div class="flex flex-col items-center space-y-3">
+            <img src="{{ asset('images/Zephyr.png') }}" alt="Zephyr Sense Logo" class="w-24 h-auto">
+            <h1 class="text-xl font-bold text-green-700">Selamat Datang</h1>
+            <p class="text-xs text-gray-600 text-center">Register</p>
+        </div>
 
-                <h1 class="text-2xl md:text-3xl font-bold text-green-700">Selamat Datang</h1>
-                <p class="text-sm md:text-base text-gray-600 text-center">Pantau Kualitas Udara Anda</p>
+        <form method="POST" action="{{route('register')}}" class="mt-6 space-y-4">
+            @csrf
+            <div class="space-y-3">
+                <div>
+                    <label for="name" class="sr-only">Nama</label>
+                    <div class="flex items-center bg-green-50 border border-green-200 rounded px-2 py-1.5">
+                        <img src="{{ asset('images/name.png') }}" alt="Name Icon" class="w-4 h-4 mr-2">
+                        <input id="name" name="name" type="text" required
+                            class="w-full bg-transparent focus:outline-none text-sm text-green-900 placeholder-green-700"
+                            placeholder="Nama">
+                    </div>
+                </div>
+                <div>
+                    <label for="email" class="sr-only">Email</label>
+                    <div class="flex items-center bg-green-50 border border-green-200 rounded px-2 py-1.5">
+                        <img src="{{ asset('images/email.png') }}" alt="Email Icon" class="w-4 h-4 mr-2">
+                        <input id="email" name="email" type="email" required
+                            class="w-full bg-transparent focus:outline-none text-sm text-green-900 placeholder-green-700"
+                            placeholder="Email">
+                    </div>
+                </div>
+                <div>
+                    <label for="password" class="sr-only">Password</label>
+                    <div class="flex items-center bg-green-50 border border-green-200 rounded px-2 py-1.5">
+                        <img src="{{ asset('images/password.png') }}" alt="Password Icon" class="w-4 h-4 mr-2">
+                        <input id="password" name="password" type="password" required
+                            class="w-full bg-transparent focus:outline-none text-sm text-green-900 placeholder-green-700"
+                            placeholder="Password">
+                    </div>
+                </div>
             </div>
 
-            <form method="POST" action="{{route('register')}}" class="mt-8 space-y-6">
-                @csrf
-
-                <div class="space-y-4">
-                    <div>
-                        <label for="name" class="sr-only">Nama</label>
-                        <div class="flex items-center bg-green-50 border border-green-200 rounded-lg px-3 py-2">
-                            {{-- Email Icon --}}
-                            <img src="{{ asset('images/name.png') }}" alt="Name Icon" class="w-5 h-5 mr-2">
-                            {{-- TODO: Ganti email-icon.png dengan ikon email yang sesuai --}}
-                            <input id="name" name="name" type="text" required
-                                class="w-full bg-transparent focus:outline-none text-sm text-green-900 placeholder-green-700"
-                                placeholder="Nama">
-                        </div>
-                    </div>
-                    <div>
-                        <label for="email" class="sr-only">Email</label>
-                        <div class="flex items-center bg-green-50 border border-green-200 rounded-lg px-3 py-2">
-                            {{-- Email Icon --}}
-                            <img src="{{ asset('images/email.png') }}" alt="Email Icon" class="w-5 h-5 mr-2">
-                            {{-- TODO: Ganti email-icon.png dengan ikon email yang sesuai --}}
-                            <input id="email" name="email" type="email" required
-                                class="w-full bg-transparent focus:outline-none text-sm text-green-900 placeholder-green-700"
-                                placeholder="Email">
-                        </div>
-                    </div>
-
-                    <div>
-                        <label for="password" class="sr-only">Password</label>
-                        <div class="flex items-center bg-green-50 border border-green-200 rounded-lg px-3 py-2">
-                            {{-- Password Icon --}}
-                            <img src="{{ asset('images/password.png') }}" alt="Password Icon" class="w-5 h-5 mr-2">
-                            {{-- TODO: Ganti password-icon.png dengan ikon gembok/password --}}
-                            <input id="password" name="password" type="password" required
-                                class="w-full bg-transparent focus:outline-none text-sm text-green-900 placeholder-green-700"
-                                placeholder="Password">
-                        </div>
-                    </div>
-                </div>
-
-                <div class="flex flex-col items-center space-y-2">
-                    <button type="submit"
-                        class="w-full bg-green-600 hover:bg-green-700 text-white font-bold py-2 px-4 rounded-lg transition">
-                        DAFTAR DAN MASUK
-                    </button>
-                </div>
-            </form>
-        </div>
+            <div class="flex flex-col items-center space-y-2">
+                <button type="submit"
+                    class="w-full bg-green-600 hover:bg-green-700 text-white font-semibold text-sm py-1.5 rounded transition">
+                    DAFTAR DAN MASUK
+                </button>
+            </div>
+        </form>
     </div>
+</div>
+
 </body>
 
 </html>
