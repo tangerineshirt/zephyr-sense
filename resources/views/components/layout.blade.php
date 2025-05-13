@@ -12,14 +12,14 @@
     @vite(['resources/css/app.css', 'resources/js/app.js'])
 </head>
 
-<body>
+<body class="bg-green-50">
     {{ $slot }}
     @php
         $currentRoute = Route::currentRouteName();
     @endphp
 
     <div class="fixed bottom-0 w-full bg-white border-t shadow-md flex justify-around items-center h-16 z-50 md:hidden">
-        <a href="{{route('home')}}">
+        <a href="{{ route('home') }}">
             <div class="flex flex-col items-center {{ $currentRoute === 'home' ? 'text-black' : 'text-gray-400' }}">
                 <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24"
                     stroke="currentColor">
@@ -29,7 +29,7 @@
                 <span class="text-xs">Home</span>
             </div>
         </a>
-        <a href="{{route('history')}}">
+        <a href="{{ route('history') }}">
             <div class="flex flex-col items-center {{ $currentRoute === 'history' ? 'text-black' : 'text-gray-400' }}">
                 <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" viewBox="0 0 24 24" fill="none"
                     stroke="currentColor" stroke-width="2">
@@ -44,12 +44,13 @@
                 <span class="text-xs">History</span>
             </div>
         </a>
-        <a href="">
-            <div class="flex flex-col items-center text-gray-400">
-                <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24"
-                    stroke="currentColor">
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                        d="M11.25 2.25c.966 0 1.75.784 1.75 1.75v.48a6.78 6.78 0 0 1 1.648.677l.34-.34a1.75 1.75 0 0 1 2.475 0l.084.084a1.75 1.75 0 0 1 0 2.475l-.34.34c.278.522.51 1.08.677 1.648h.48c.966 0 1.75.784 1.75 1.75v.168c0 .966-.784 1.75-1.75 1.75h-.48a6.78 6.78 0 0 1-.677 1.648l.34.34a1.75 1.75 0 0 1 0 2.475l-.084.084a1.75 1.75 0 0 1-2.475 0l-.34-.34a6.78 6.78 0 0 1-1.648.677v.48c0 .966-.784 1.75-1.75 1.75h-.168a1.75 1.75 0 0 1-1.75-1.75v-.48a6.78 6.78 0 0 1-1.648-.677l-.34.34a1.75 1.75 0 0 1-2.475 0l-.084-.084a1.75 1.75 0 0 1 0-2.475l.34-.34a6.78 6.78 0 0 1-.677-1.648h-.48a1.75 1.75 0 0 1-1.75-1.75v-.168c0-.966.784-1.75 1.75-1.75h.48a6.78 6.78 0 0 1 .677-1.648l-.34-.34a1.75 1.75 0 0 1 0-2.475l.084-.084a1.75 1.75 0 0 1 2.475 0l.34.34a6.78 6.78 0 0 1 1.648-.677v-.48c0-.966.784-1.75 1.75-1.75h.168zM12 15.75a3.75 3.75 0 1 0 0-7.5 3.75 3.75 0 0 0 0 7.5z" />
+        <a href="{{ route('setting') }}">
+            <div class="flex flex-col items-center {{ $currentRoute === 'setting' ? 'text-black' : 'text-gray-400' }}">
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                    stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="h-6 w-6">
+                    <path
+                        d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 1 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 1 1-4 0v-.09a1.65 1.65 0 0 0-1-1.51 1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 1 1-2.83-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 1 1 0-4h.09a1.65 1.65 0 0 0 1.51-1 1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 1 1 2.83-2.83l.06.06a1.65 1.65 0 0 0 1.82.33h.06a1.65 1.65 0 0 0 1-1.51V3a2 2 0 1 1 4 0v.09c0 .66.39 1.26 1 1.51h.06a1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 1 1 2.83 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82v.06c.23.63.84 1.06 1.51 1.06H21a2 2 0 1 1 0 4h-.09c-.66 0-1.26.39-1.51 1z" />
+                    <circle cx="12" cy="12" r="3" />
                 </svg>
                 <span class="text-xs">Settings</span>
             </div>

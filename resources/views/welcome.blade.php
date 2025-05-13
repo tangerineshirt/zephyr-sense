@@ -45,7 +45,9 @@
                         </div>
                     </div>
                 </div>
-
+                @error('email')
+                    <div class="text-red-500 text-sm">{{ $message }}</div>
+                @enderror
                 <div class="flex flex-col items-center space-y-2">
                     <button type="submit"
                         class="w-full bg-green-600 hover:bg-green-700 text-white font-semibold text-sm py-1.5 rounded transition">

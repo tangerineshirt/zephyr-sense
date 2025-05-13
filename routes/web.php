@@ -17,3 +17,4 @@ Route::middleware('auth')->controller(AirController::class)->group(function(){
     Route::get('/history', 'history')->name('history');
     Route::get('/setting', 'setting')->name('setting');
 });
+

@@ -19,22 +19,22 @@ class AirController extends Controller
     }
 
     public function login(Request $request)
-{
-    $credentials = $request->validate([
-        'email' => 'required|string|email',
-        'password' => 'required|string'
-    ]);
+    {
+        $credentials = $request->validate([
+            'email' => 'required|string|email',
+            'password' => 'required|string'
+        ]);
 
-    // Coba login
-    if (Auth::attempt($credentials)) {
-        $request->session()->regenerate(); // Hindari session fixation
-        return redirect()->route('home');
+        // Coba login
+        if (Auth::attempt($credentials)) {
+            $request->session()->regenerate(); // Hindari session fixation
+            return redirect()->route('home');
+        }
+
+        throw ValidationException::withMessages([
+            'email' => 'Email atau password salah.'
+        ]);
     }
-
-    throw ValidationException::withMessages([
-        'email' => 'Email atau password salah.'
-    ]);
-}
 
     public function logout(Request $request)
     {
@@ -55,11 +55,22 @@ class AirController extends Controller
 
     public function register(Request $request)
     {
-        $validated = $request->validate([
-            'name' => 'required|string|max:255',
-            'email' => 'required|string|email|unique:users,email',
-            'password' => 'required|string|min:6',
-        ]);
+        $validated = $request->validate(
+            [
+                'name' => 'required|string|max:100',
+                'email' => 'required|string|email|unique:users,email',
+                'password' => 'required|string|min:6',
+            ],
+            [
+                'name.required' => 'Nama wajib diisi',
+                'name.max' => 'Nama kepanjangan',
+                'email.required' => 'Email wajib diisi',
+                'email.email' => 'Email tidak sesuai format',
+                'email.unique' => 'Email sudah digunakan',
+                'password.required' => 'Password wajib ada',
+                'password.min' => 'Password minimal 6 karakter',
+            ]
+        );
 
         // Simpan user baru dengan password yang sudah di-hash
         $user = User::create([
@@ -143,8 +154,7 @@ class AirController extends Controller
         $endDate = Carbon::now()->endOfDay();
 
         $data = Air::whereBetween('created_at', [$startDate, $endDate])
-            ->orderBy('created_at', 'desc')
-            ->get();
+            ->orderBy('created_at', 'desc')->get();
 
         $filtered = collect();
         $previousStatus = null;
@@ -167,11 +177,11 @@ class AirController extends Controller
     public function sensor(Request $request)
     {
         $request->validate([
-            'pm25' => 'required|float',
-            'co' => 'required|float',
-            'no2' => 'required|float',
-            'temp' => 'required|float',
-            'humidity' => 'required|float',
+            'pm25' => 'required|numeric',
+            'co' => 'required|numeric',
+            'no2' => 'required|numeric',
+            'temp' => 'required|numeric',
+            'humidity' => 'required|numeric',
             'air_quality' => 'required|string',
         ]);
 
@@ -181,8 +191,9 @@ class AirController extends Controller
             'no2' => $request->no2,
             'temp' => $request->temp,
             'humidity' => $request->humidity,
+            'air_quality' => $request->air_quality,
         ]);
 
-        return response()->json([]);
+        return response()->json(['message' => 'Data saved']);
     }
 }

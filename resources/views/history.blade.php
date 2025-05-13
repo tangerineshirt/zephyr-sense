@@ -19,23 +19,23 @@
                         </svg>
                     </div>
                 </a>
-                <a href="{{route('setting')}}">
-                    <img src="{{asset('images/settings.png')}}" alt="Settings" class="h-8 w-auto">
+                <a href="{{ route('setting') }}">
+                    <img src="{{ asset('images/settings.png') }}" alt="Settings" class="h-8 w-auto">
                 </a>
             </div>
         </div>
     </nav>
-    <div class="p-4 pt-18">
+    <div class="p-4 pt-18 pb-18 md:pb-4 bg-green-50">
         <h2 class="text-xl font-semibold mb-4">Histori Perubahan Kualitas Udara (3 Hari Terakhir)</h2>
-    
+
         <ul class="space-y-3">
             @forelse ($history as $item)
-                <li class="p-4 rounded shadow flex justify-between items-center border-l-4
+                <li
+                    class="p-4 rounded shadow flex justify-between items-center border-l-4
                     @if ($item->air_quality === 'Good') border-green-500 bg-green-100
                     @elseif ($item->air_quality === 'Moderate') border-yellow-500 bg-yellow-100
                     @elseif ($item->air_quality === 'Poor') border-orange-500 bg-orange-100
-                    @else border-red-500 bg-red-100
-                    @endif">
+                    @else border-red-500 bg-red-100 @endif">
                     <div>
                         <p class="font-semibold">{{ $item->air_quality }}</p>
                         <p class="text-sm text-gray-500">{{ $item->created_at->format('d M Y, H:i:s') }}</p>

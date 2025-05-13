@@ -25,21 +25,24 @@
             </div>
         </div>
     </nav>
-    <div class="pt-16">
-        <div class="shadow-md mx-4 mb-8 mt-4 rounded-md p-6 bg-gray-100">
-            <h1 class="text-4xl font-semibold">{{ $user->name }}</h1>
-            <p>{{ $user->email }}</p>
+    <div>
+        <div class="pt-16">
+            <div class="shadow-md mx-4 mb-8 mt-4 rounded-md p-6 bg-gray-100">
+                <h1 class="text-4xl font-semibold">{{ $user->name }}</h1>
+                <p>{{ $user->email }}</p>
+            </div>
+        </div>
+        <div class="flex justify-center w-full">
+            <form method="POST" action="{{ route('logout') }}">
+                @csrf
+
+                <button type='submit' class="">
+                    <div
+                        class="flex m-4 border-2 border-red-500 text-red-500 justify-center rounded-md p-4 hover:bg-red-500 hover:text-white transition-colors duration-300">
+                        Keluar
+                    </div>
+                </button>
+            </form>
         </div>
     </div>
-    <form method="POST" action="{{ route('logout') }}">
-        @csrf
-
-        <button type='submit' class="">
-            <div
-                class="flex m-4 border-2 border-red-500 text-red-500 justify-center rounded-md p-4 hover:bg-red-500 hover:text-white transition-colors duration-300">
-                Keluar
-            </div>
-        </button>
-        <img src="{{ asset('images/absolute_windah.jpg') }}" alt="The Wind" class="h-64 w-auto justify-self-center">
-    </form>
 </x-layout>
